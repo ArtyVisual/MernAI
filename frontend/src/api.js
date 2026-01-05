@@ -9,6 +9,11 @@ export const askAI = async (data) => {
         body: JSON.stringify(data)
     });
 
+    if (!res.ok) {
+        const text = await res.text();
+        throw new Error(text || "API Error");
+    }
+
     return res.json();
 };
 

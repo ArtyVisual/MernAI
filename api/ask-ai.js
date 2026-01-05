@@ -7,13 +7,12 @@ export default async function handler(req, res) {
         const { prompt } = req.body;
 
         if (!prompt) {
-            return res.status(400).json({ message: "Prompt required" });
+            return res.status(400).json({ message: "Prompt is required" });
         }
 
-        // TEMP TEST RESPONSE
         return res.status(200).json({
             success: true,
-            reply: "API is working"
+            reply: "API is working perfectly"
         });
 
     } catch (error) {
