@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import ReactFlow, { Background, Controls } from "reactflow";
 import "reactflow/dist/style.css";
-import axios from "axios";
-
 import "./App.css";
 import InputNode from "./node/InputNode";
 import ResultNode from "./node/ResultNode";
@@ -18,7 +16,7 @@ const edges = [{ id: "e1-2", source: "1", target: "2" }];
 function App() {
   const [prompt, setPrompt] = useState("");
   const [response, setResponse] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loading] = useState(false);
 
   const nodes = [
     {
