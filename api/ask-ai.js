@@ -8,7 +8,7 @@ export default async function handler(req, res) {
     try {
         const { prompt } = req.body;
 
-        const aiRes = await axios.post(
+        const response = await axios.post(
             "https://openrouter.ai/api/v1/chat/completions",
             {
                 model: "mistralai/mistral-7b-instruct:free",
@@ -23,7 +23,7 @@ export default async function handler(req, res) {
         );
 
         res.status(200).json({
-            answer: aiRes.data.choices[0].message.content
+            answer: response.data.choices[0].message.content
         });
     } catch (err) {
         res.status(500).json({ error: err.message });
