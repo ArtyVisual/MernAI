@@ -2,7 +2,7 @@ import axios from "axios";
 
 export default async function handler(req, res) {
     if (req.method !== "POST") {
-        return res.status(405).json({ error: "Method not allowed" });
+        return res.status(405).json({ error: "Method Not Allowed" });
     }
 
     try {
@@ -12,21 +12,21 @@ export default async function handler(req, res) {
             "https://openrouter.ai/api/v1/chat/completions",
             {
                 model: "mistralai/mistral-7b-instruct:free",
-                messages: [{ role: "user", content: prompt }],
+                messages: [{ role: "user", content: prompt }]
             },
             {
                 headers: {
                     Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
-                    "Content-Type": "application/json",
-                },
+                    "Content-Type": "application/json"
+                }
             }
         );
 
         res.status(200).json({
-            answer: aiRes.data.choices[0].message.content,
+            answer: aiRes.data.choices[0].message.content
         });
-    } catch (error) {
-        console.error(error.response?.data || error.message);
+    } catch (err) {
+        console.error(err);
         res.status(500).json({ error: "AI request failed" });
     }
 }
