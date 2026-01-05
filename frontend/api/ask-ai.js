@@ -1,38 +1,44 @@
-import axios from "axios";
-
 export default async function handler(req, res) {
     if (req.method !== "POST") {
         return res.status(405).json({ error: "Method not allowed" });
     }
 
-    const { prompt } = req.body;
+    try {
+        const { prompt } = req.body;
 
-    if (!prompt) {
-        return res.status(400).json({ error: "Prompt missing" });
-    }
-
-    const aiRes = await axios.post(
-        "https://openrouter.ai/api/v1/chat/completions",
-        {
-            model: "mistralai/mistral-7b-instruct:free",
-            messages: [{ role: "user", content: prompt }],
-        },
-        {
-            headers: {
-                Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
-                "Content-Type": "application/json",
-            },
+        if (!prompt) {
+            return res.status(400).json({ error: "Prompt missing" });
         }
-    );
 
-    const answer =
-        aiRes.data?.choices?.[0]?.message?.content;
+        const response = await fetch(
+            "https://openrouter.ai/api/v1/chat/completions",
+            {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    model: "mistralai/mistral-7b-instruct:free",
+                    messages: [{ role: "user", content: prompt }]
+                })
+            }
+        );
 
-    if (!answer) {
-        throw new Error("Invalid AI response");
+        const data = await response.json();
+
+        const answer =
+            data?.choices?.[0]?.message?.content;
+
+        if (!answer) {
+            console.error("BAD AI RESPONSE:", data);
+            return res.status(500).json({ error: "Invalid AI response" });
+        }
+
+        return res.status(200).json({ answer });
+
+    } catch (err) {
+        console.error("ASK-AI ERROR:", err);
+        return res.status(500).json({ error: err.message });
     }
-
-    return res.status(200).json({
-        answer: aiRes.data.choices[0].message.content,
-    });
 }
