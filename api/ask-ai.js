@@ -1,32 +1,22 @@
-import axios from "axios";
-
 export default async function handler(req, res) {
     if (req.method !== "POST") {
-        return res.status(405).json({ error: "Method not allowed" });
+        return res.status(405).json({ message: "Method Not Allowed" });
     }
 
     try {
         const { prompt } = req.body;
 
-        const aiRes = await axios.post(
-            "https://openrouter.ai/api/v1/chat/completions",
-            {
-                model: "mistralai/mistral-7b-instruct:free",
-                messages: [{ role: "user", content: prompt }]
-            },
-            {
-                headers: {
-                    Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
-                    "Content-Type": "application/json"
-                }
-            }
-        );
+        if (!prompt) {
+            return res.status(400).json({ message: "Prompt required" });
+        }
 
-        res.status(200).json({
-            answer: aiRes.data.choices[0].message.content
+        // TEMP TEST RESPONSE
+        return res.status(200).json({
+            success: true,
+            reply: "API is working"
         });
 
-    } catch (err) {
-        res.status(500).json({ error: "AI failed", details: err.message });
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
     }
 }
