@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export const askAI = (prompt) =>
     axios.post("/api/ask-ai", { prompt });
 
