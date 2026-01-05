@@ -11,7 +11,8 @@ const app = express();
 const allowedOrigins = [
     'http://localhost:3000',
     'http://localhost:5000',
-    'https://mern-ai-zeta.vercel.app'
+    'https://mern-ai-zeta.vercel.app',
+    'https://mern-3gk7h71hy-abbas-projects-8c357037.vercel.app'
 ];
 
 const corsOptions = {
