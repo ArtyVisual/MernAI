@@ -26,7 +26,6 @@ export default async function handler(req, res) {
             answer: aiRes.data.choices[0].message.content
         });
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: "AI request failed" });
+        res.status(500).json({ error: err.message });
     }
 }
