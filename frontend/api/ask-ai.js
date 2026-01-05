@@ -25,6 +25,13 @@ export default async function handler(req, res) {
         }
     );
 
+    const answer =
+        aiRes.data?.choices?.[0]?.message?.content;
+
+    if (!answer) {
+        throw new Error("Invalid AI response");
+    }
+
     return res.status(200).json({
         answer: aiRes.data.choices[0].message.content,
     });
