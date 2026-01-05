@@ -6,8 +6,8 @@ const API_URL =
         : "http://localhost:5000";
 
 export const askAI = (prompt) => {
-    axios.post("https://mern-ai-zeta.vercel.app/api/ask-ai", { prompt });
-}
+    return axios.post(`${API_URL}/api/ask-ai`, { prompt }); // <- return the promise
+};
 
 export const savePrompt = (prompt, response) =>
     axios.post(`${API_URL}/api/save`, { prompt, response });
