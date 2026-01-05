@@ -7,11 +7,15 @@ import aiRoutes from "./routes/ai.js";
 dotenv.config();
 
 const app = express();
+
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect(process.env.MONGO_URI);
+mongoose.connect(process.env.MONGO_URI)
+    .then(() => console.log("Mongo connected"))
+    .catch(err => console.error(err));
 
 app.use("/api", aiRoutes);
 
-app.listen(5000, () => console.log("Server running on 5000"));
+// ✅ VERY IMPORTANT
+export default app;

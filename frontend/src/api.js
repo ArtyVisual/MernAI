@@ -5,20 +5,9 @@ const API_URL =
         ? "https://mern-ai-zeta.vercel.app"
         : "http://localhost:5000";
 
-export const askAI = async (prompt) => {
-    const res = await fetch("/api/ask-ai", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt }),
-    });
-
-    if (!res.ok) {
-        throw new Error("API failed");
-    }
-
-    return res.json();
-};
-
+export const askAI = (prompt) => {
+    axios.post("https://mern-ai-zeta.vercel.app/api/ask-ai", { prompt });
+}
 
 export const savePrompt = (prompt, response) =>
     axios.post(`${API_URL}/api/save`, { prompt, response });
