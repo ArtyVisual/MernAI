@@ -1,24 +1,38 @@
+import axios from "axios";
+
 export default async function handler(req, res) {
-    console.log("🔥 API HIT");
-    console.log("METHOD:", req.method);
-    console.log("HEADERS:", req.headers);
-    console.log("BODY:", req.body);
-
-    // Allow browser preflight
-    if (req.method === "OPTIONS") {
-        console.log("🟡 OPTIONS request");
-        return res.status(200).end();
-    }
-
+    // MUST exist or Vercel returns 405
     if (req.method !== "POST") {
-        console.log("🔴 NOT POST");
-        return res.status(405).json({ error: "Method Not Allowed" });
+        return res.status(200).json({ ok: true, method: req.method });
     }
 
-    console.log("✅ POST CONFIRMED");
+    try {
+        const { prompt } = req.body;
 
-    return res.status(200).json({
-        message: "API WORKING",
-        received: req.body,
-    });
+        if (!prompt) {
+            return res.status(400).json({ error: "Prompt missing" });
+        }
+
+        const aiRes = await axios.post(
+            "https://openrouter.ai/api/v1/chat/completions",
+            {
+                model: "mistralai/mistral-7b-instruct:free",
+                messages: [{ role: "user", content: prompt }],
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+
+        return res.status(200).json({
+            answer: aiRes.data.choices[0].message.content,
+        });
+    } catch (err) {
+        return res.status(500).json({
+            error: err.message,
+        });
+    }
 }
