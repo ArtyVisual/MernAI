@@ -32,7 +32,7 @@ export default async function handler(req, res) {
 
         if (!answer) {
             console.error("BAD AI RESPONSE:", data);
-            return res.status(500).json({ error: "Invalid AI response" });
+            return res.status(500).json({ error: "Invalid API AI response" });
         }
 
         return res.status(200).json({ answer });
